@@ -11,9 +11,10 @@ JQ="/usr/local/bin/jq"
 
 # get access token
 ACCESS_TOKEN=`cat ~/.bux-config.json | ${JQ} .account.access_token | sed 's/"//g'`
+PERF_URL="https://api.getbux.com/core/13/users/me/portfolio/performance"
 
 # fetch data from users/me/portfolio/performance
-DATA=`curl -s -H "X-App-Version: 1.36-2697" -H "Accept-Language: en" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "Host: api.getbux.com" -H "User-Agent: okhttp/3.2.0" https://api.getbux.com/core/13/users/me/portfolio/performance`
+DATA=`curl -s -H "X-App-Version: 1.36-2697" -H "Accept-Language: en" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "Host: api.getbux.com" -H "User-Agent: okhttp/3.2.0" ${PERF_URL}`
 
 # match values
 PERF=`echo "${DATA}" | ${JQ} .performance | sed 's/"//g'`%
