@@ -17,11 +17,12 @@ PERF_URL="https://api.getbux.com/core/13/users/me/portfolio/performance"
 DATA=`curl -s -H "X-App-Version: 1.36-2697" -H "Accept-Language: en" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "Host: api.getbux.com" -H "User-Agent: okhttp/3.2.0" ${PERF_URL}`
 
 # match values
-PERF=`echo "${DATA}" | ${JQ} .performance | sed 's/"//g'`%
+PERF=`echo "${DATA}" | ${JQ} .performance | sed 's/"//g'`
+PERF_PERC=`echo "${PERF}*100" | bc | xargs printf "%.2f"`%
 VALUE=`echo "${DATA}" | ${JQ} .accountValue.amount | sed 's/"//g'`
 CURRENCY=`echo "${DATA}" | ${JQ} .accountValue.currency | sed 's/"//g'`
 
 # print
-echo $PERF
+echo $PERF_PERC
 echo "---"
 echo "Balance: ${VALUE} ${CURRENCY}"
