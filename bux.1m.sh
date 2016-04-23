@@ -7,20 +7,22 @@
 # <bitbar.desc>Show BUX trading overview.</bitbar.desc>
 # <bitbar.image></bitbar.image>
 
-JQ="/usr/local/bin/jq"
+JQ="/usr/local/bin/jq -r"
+
+export LC_NUMERIC=en_US.UTF
 
 # get access token
-ACCESS_TOKEN=`cat ~/.bux-config.json | ${JQ} .account.access_token | sed 's/"//g'`
+ACCESS_TOKEN=`cat ~/.bux-config.json | ${JQ} .account.access_token`
 PERF_URL="https://api.getbux.com/core/13/users/me/portfolio/performance"
 
 # fetch data from users/me/portfolio/performance
 DATA=`curl -s -H "X-App-Version: 1.36-2697" -H "Accept-Language: en" -H "Authorization: Bearer ${ACCESS_TOKEN}" -H "Host: api.getbux.com" -H "User-Agent: okhttp/3.2.0" ${PERF_URL}`
 
 # match values
-PERF=`echo "${DATA}" | ${JQ} .performance | sed 's/"//g'`
-PERF_PERC=`echo "${PERF}*100" | bc | xargs printf "%.2f"`%
-VALUE=`echo "${DATA}" | ${JQ} .accountValue.amount | sed 's/"//g'`
-CURRENCY=`echo "${DATA}" | ${JQ} .accountValue.currency | sed 's/"//g'`
+PERF=`echo "${DATA}" | ${JQ} .performance`
+PERF_PERC=`echo ${PERF}*100 | bc | xargs printf "%.2f"`%
+VALUE=`echo "${DATA}" | ${JQ} .accountValue.amount`
+CURRENCY=`echo "${DATA}" | ${JQ} .accountValue.currency`
 
 # print
 echo $PERF_PERC
